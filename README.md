@@ -1,10 +1,14 @@
-# Claude Code WeChat Notify
+# Claude Code WeChat Notify / Claude Code 微信通知
 
+> **免责声明：** 本项目由 [Claude Code](https://claude.ai/code) 构建。BotID 和 Secret 拥有通过企业微信机器人发送消息的完整权限——使用风险自负。作者对任何滥用、数据泄露或账户问题不承担责任。
+>
 > **Disclaimer:** This project was built with [Claude Code](https://claude.ai/code). Your BotID and Secret grant full access to send messages via your WeCom bot — use at your own risk. The authors assume no liability for any misuse, data leakage, or account issues.
 
-When Claude Code pops up a permission confirmation dialog, this tool pushes a notification to your phone via WeChat (企业微信).
+当 Claude Code 弹出权限确认弹窗时，本工具会通过企业微信向你的手机推送通知。
 
-## How it works
+When Claude Code pops up a permission confirmation dialog, this tool pushes a notification to your phone via WeCom (企业微信).
+
+## 工作原理 / How it works
 
 ```
 Claude Code permission dialog
@@ -16,49 +20,51 @@ Notification Hook (settings.json)
 wechat-notify.py ──HTTP──► wechat-daemon.py ──WebSocket──► 企业微信 ──► 手机微信
 ```
 
-- **wechat-daemon.py** — background process that maintains a WebSocket long-connection to the WeCom server
-- **wechat-notify.py** — called by Claude Code's hook, sends the notification via the local daemon
+- **wechat-daemon.py** — 后台守护进程，维护到企业微信服务器的 WebSocket 长连接 / background process maintaining a WebSocket long-connection to WeCom
+- **wechat-notify.py** — 被 Claude Code hook 调用，通过本地守护进程发送通知 / called by Claude Code's hook, sends notification via the local daemon
 
-## Prerequisites
+## 环境要求 / Prerequisites
 
 - Python 3.8+
-- A WeChat Work (企业微信) account (free personal registration)
+- 企业微信账号（免费个人注册即可） / A WeCom account (free personal registration)
 - Claude Code CLI
 
-## Setup
+## 配置步骤 / Setup
 
-### 1. Install dependencies
+### 1. 安装依赖 / Install dependencies
 
 ```bash
 pip install websocket-client requests
 ```
 
-### 2. Create a WeCom AI Bot
+### 2. 创建企业微信智能机器人 / Create a WeCom AI Bot
 
-1. Open [WeChat Work Admin Console](https://work.weixin.qq.com) in browser
-2. Go to **Application Management** → **Smart Bot (智能机器人)**
-3. Create a bot manually, select **API mode**
-4. For connection method, choose **Long Connection (长连接)**
-5. Copy the **BotID** and **Secret** (Secret is shown only once!)
+1. 浏览器打开 [企业微信管理后台](https://work.weixin.qq.com) / Open [WeCom Admin Console](https://work.weixin.qq.com)
+2. 进入「应用管理」→「智能机器人」/ Go to **App Management** → **Smart Bot (智能机器人)**
+3. 手动创建机器人，选择 **API 模式** / Create a bot manually, select **API mode**
+4. 连接方式选择 **长连接** / Choose **Long Connection (长连接)** as connection method
+5. 复制 **BotID** 和 **Secret**（Secret 仅显示一次！）/ Copy **BotID** and **Secret** (shown only once!)
 
-### 3. Configure
+### 3. 填写配置 / Configure
 
 ```bash
 cp wechat-notify-config.example.json wechat-notify-config.json
 ```
 
-Edit `wechat-notify-config.json`:
+编辑 `wechat-notify-config.json`：
 
 ```json
 {
-    "bot_id": "your-bot-id-here",
-    "secret": "your-secret-here"
+    "bot_id": "你的BotID",
+    "secret": "你的Secret"
 }
 ```
 
-### 4. Configure Claude Code Hook
+### 4. 配置 Claude Code Hook / Configure Claude Code Hook
 
-Add the following to your Claude Code `settings.json` (`~/.claude/settings.json` or `.claude/settings.json`):
+在 Claude Code 的 `settings.json`（`~/.claude/settings.json` 或 `.claude/settings.json`）中添加：
+
+Add the following to your Claude Code `settings.json`:
 
 ```json
 {
@@ -78,26 +84,28 @@ Add the following to your Claude Code `settings.json` (`~/.claude/settings.json`
 }
 ```
 
-Replace `/path/to/wechat-notify.py` with the actual absolute path.
+将 `/path/to/wechat-notify.py` 替换为实际绝对路径。 / Replace `/path/to/wechat-notify.py` with the actual absolute path.
 
-### 5. Start the daemon
+### 5. 启动守护进程 / Start the daemon
 
 ```bash
 python wechat-daemon.py
 ```
 
-Keep this terminal window open. On first run, send any message to the bot from your phone's WeChat Work app — this captures your chat ID (one-time setup).
+保持终端窗口打开。首次运行时，在手机企业微信中给机器人发任意消息——这一步会捕获你的 chat ID（仅需一次）。
 
-## Usage
+Keep this terminal window open. On first run, send any message to the bot from your phone's WeCom app — this captures your chat ID (one-time setup).
 
-1. Start the daemon: `python wechat-daemon.py`
-2. Use Claude Code normally
-3. Whenever Claude Code needs your approval, you'll get a WeChat notification on your phone
+## 日常使用 / Usage
 
-## Troubleshooting
+1. 启动守护进程：`python wechat-daemon.py` / Start the daemon
+2. 正常使用 Claude Code / Use Claude Code normally
+3. Claude Code 需要确认时，手机微信即收到通知 / You'll get a WeChat notification whenever approval is needed
 
-| Problem | Solution |
+## 常见问题 / Troubleshooting
+
+| 问题 Problem | 解决方案 Solution |
 |---------|----------|
-| No notification received | Check daemon is running and authenticated |
-| "chatid not captured" | Send any message to the bot from WeChat Work on your phone |
-| Connection refused | Make sure the daemon is running before notifying |
+| 未收到通知 / No notification | 检查守护进程是否运行且已认证 / Check daemon is running and authenticated |
+| chatid 未捕获 / "chatid not captured" | 在手机企业微信中给机器人发一条消息 / Send any message to the bot from WeCom on your phone |
+| 连接被拒绝 / Connection refused | 确保守护进程先于通知启动 / Make sure the daemon is running before the hook fires |
