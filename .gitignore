@@ -1,0 +1,7 @@
+# 你的真实配置文件（含 bot_id 和 secret），不要提交到 git
+wechat-notify-config.json
+# 运行时自动生成的端口文件
+.wecom-port
+# Python
+__pycache__/
+.claude/
