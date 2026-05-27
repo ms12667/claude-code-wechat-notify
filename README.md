@@ -1,5 +1,7 @@
 # Claude Code WeChat Notify
 
+> **Disclaimer:** This project was built with [Claude Code](https://claude.ai/code). Your BotID and Secret grant full access to send messages via your WeCom bot — use at your own risk. The authors assume no liability for any misuse, data leakage, or account issues.
+
 When Claude Code pops up a permission confirmation dialog, this tool pushes a notification to your phone via WeChat (企业微信).
 
 ## How it works
