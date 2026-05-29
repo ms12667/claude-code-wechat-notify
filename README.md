@@ -1,4 +1,4 @@
-# Claude Code WeChat Notify 🔔
+# Claude Code WeChat Reminder 🔔
 
 > Never miss a Claude Code permission prompt — get push notifications on WeChat when you're AFK.
 >
