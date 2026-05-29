@@ -20,7 +20,7 @@ def _read_port():
 def main():
     try:
         with open(CONFIG_PATH, "r", encoding="utf-8") as f:
-            config = json.load(f)
+            json.load(f)
     except Exception:
         print("[wechat-notify] config not found", file=sys.stderr)
         sys.exit(0)
@@ -36,7 +36,6 @@ def main():
     except json.JSONDecodeError:
         pass
 
-    msg_type = ctx.get("notification_type", "permission_prompt")
     message = ctx.get("message", "")
     tool = ctx.get("tool_name", "")
     if tool:

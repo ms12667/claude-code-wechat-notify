@@ -260,7 +260,7 @@ def main():
     # HTTP server 在主线程
     httpd = HTTPServer(("127.0.0.1", port), Handler)
     print(f"[daemon] HTTP 服务运行在 http://127.0.0.1:{port}", file=sys.stderr)
-    print(f"[daemon] 等待 WebSocket 认证...", file=sys.stderr)
+    print("[daemon] 等待 WebSocket 认证...", file=sys.stderr)
 
     try:
         httpd.serve_forever()
